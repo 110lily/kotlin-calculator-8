@@ -10,12 +10,17 @@ fun main() {
 
 fun addNumbers(input: String?): Int {
     if (input.isNullOrBlank()) return 0
-    val numbers = input.split(",", ":")
-    var sum = 0
+    var numbers = input
+    var delimiter = "[,:]"
 
-    for (number in numbers) {
-        sum += number.toInt()
+    if (input.startsWith("//")) {
+        val splitIndex = input.indexOf("\\n")
+        if (splitIndex != -1) {
+            delimiter = Regex.escape(input.substring(2, 3))
+            numbers = input.substring(splitIndex + 2)
+        }
     }
 
-    return sum
+    return numbers
+        .split(delimiter.toRegex()).sumOf { it.toInt() }
 }
